@@ -13,8 +13,12 @@ repositories {
 }
 
 dependencies {
+	// JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// DB
 	runtimeOnly 'com.h2database:h2'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.assertj:assertj-core:3.19.0'
 }
