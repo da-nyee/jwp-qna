@@ -33,4 +33,35 @@ class StationRepositoryTest {
         assertThat(actual.getId()).isNotNull();
         assertThat(actual.getName()).isEqualTo("잠실역");
     }
+
+    @Test
+    void isEqualToAndIsSameAs() {
+        Station station1 = stations.save(new Station("잠실역"));
+        Station station2 = stations.findByName("잠실역");
+
+        assertThat(station2.getId()).isNotNull();
+        assertThat(station2.getName()).isEqualTo("잠실역");
+
+        assertThat(station1).isEqualTo(station2);       // 동등성 보장
+        assertThat(station1).isSameAs(station2);        // 동일성 보장
+    }
+
+    @Test
+    void updateDirtyChecking() {
+        Station station = stations.save(new Station("잠실역"));
+        station.changeName("잠실나루역");        // JPA 변경 감지 / 더티 체킹
+        Station actual = stations.findByName("잠실나루역");
+
+        assertThat(actual).isNotNull();
+    }
+
+    @Test
+    void updateNoDirtyChecking() {
+        Station station = stations.save(new Station("잠실역"));
+        station.changeName("잠실나루역");
+        station.changeName("잠실역");
+        Station actual = stations.findByName("잠실역");
+
+        assertThat(actual).isNotNull();
+    }
 }
