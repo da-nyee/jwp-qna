@@ -3,6 +3,7 @@ package qna.subway.domain;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /*
 create table station (
@@ -30,6 +31,10 @@ public class Station {
     @Column(nullable = false)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "line_id") // FK 이름 지정
+    private Line line;
+
     // 기본 생성자가 왜 필요할까? JPA가 사용하는 기술과 관련 O 👉 Java Reflection API 유사 기술을 사용함
     // 즉, 기본 생성자를 통해 인스턴스를 생성하고 -> 여기에 있는 필드 값들을 차례차례 채워나감
     public Station() {
@@ -51,6 +56,18 @@ public class Station {
     @NonNull
     public String getName() {
         return name;
+    }
+
+    public Line getLine() {
+        return line;
+    }
+
+    public void setLine(Line line) {
+        if (Objects.nonNull(line)) {
+            line.getStations().remove(this);
+        }
+        this.line = line;
+        line.getStations().add(this);
     }
 
     public void changeName(String name) {
