@@ -1,19 +1,42 @@
 package qna.domain;
 
+import org.springframework.lang.NonNull;
 import qna.UnAuthorizedException;
 
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Entity
 public class User {
     public static final GuestUser GUEST_USER = new GuestUser();
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NonNull
+    @Column(length = 20, nullable = false)
     private String userId;
+
+    @NonNull
+    @Column(length = 20, nullable = false)
     private String password;
+
+    @NonNull
+    @Column(length = 20, nullable = false)
     private String name;
+
+    @Column(length = 50)
     private String email;
 
-    private User() {
+    @NonNull
+    @Column(nullable = false)
+    private LocalDateTime created_at = LocalDateTime.now();
+
+    private LocalDateTime updated_at = LocalDateTime.now();
+
+    protected User() {
     }
 
     public User(String userId, String password, String name, String email) {
@@ -70,27 +93,30 @@ public class User {
         this.id = id;
     }
 
+    @NonNull
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(@NonNull String userId) {
         this.userId = userId;
     }
 
+    @NonNull
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@NonNull String password) {
         this.password = password;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 
@@ -102,6 +128,23 @@ public class User {
         this.email = email;
     }
 
+    @NonNull
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(@NonNull LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    public LocalDateTime getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -110,6 +153,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", created_at=" + created_at +
+                ", updated_at=" + updated_at +
                 '}';
     }
 

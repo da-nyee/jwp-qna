@@ -1,11 +1,37 @@
 package qna.domain;
 
+import org.springframework.lang.NonNull;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NonNull
+    @Column(length = 100, nullable = false)
     private String title;
+
+    @Lob
     private String contents;
+
     private Long writerId;
+
+    @NonNull
+    @Column(nullable = false)
+    private LocalDateTime created_at = LocalDateTime.now();
+
+    private LocalDateTime updated_at = LocalDateTime.now();
+
+    @NonNull
+    @Column(nullable = false)
     private boolean deleted = false;
+
+    protected Question() {
+    }
 
     public Question(String title, String contents) {
         this(null, title, contents);
@@ -38,11 +64,12 @@ public class Question {
         this.id = id;
     }
 
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NonNull String title) {
         this.title = title;
     }
 
@@ -62,6 +89,23 @@ public class Question {
         this.writerId = writerId;
     }
 
+    @NonNull
+    public LocalDateTime getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(@NonNull LocalDateTime created_at) {
+        this.created_at = created_at;
+    }
+
+    public LocalDateTime getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(LocalDateTime updated_at) {
+        this.updated_at = updated_at;
+    }
+
     public boolean isDeleted() {
         return deleted;
     }
@@ -77,6 +121,8 @@ public class Question {
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", writerId=" + writerId +
+                ", created_at=" + created_at +
+                ", updated_at=" + updated_at +
                 ", deleted=" + deleted +
                 '}';
     }
