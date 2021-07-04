@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.Answer;
 import qna.domain.Question;
 import qna.domain.User;
-import qna.repository.AnswerRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

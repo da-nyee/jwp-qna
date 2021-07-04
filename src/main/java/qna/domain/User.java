@@ -5,36 +5,38 @@ import qna.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class User {
-    public static final GuestUser GUEST_USER = new GuestUser();
 
+    public static final GuestUser GUEST_USER = new GuestUser();
+    @NonNull
+    @Column(nullable = false)
+    private final LocalDateTime created_at = LocalDateTime.now();
+    private final LocalDateTime updated_at = LocalDateTime.now();
+    @OneToMany(mappedBy = "writer", orphanRemoval = true)
+    private final List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "deletedUser", orphanRemoval = true)
+    private final List<DeleteHistory> deleteHistories = new ArrayList<>();
+    @OneToMany(mappedBy = "writer", orphanRemoval = true)
+    private final List<Question> questions = new ArrayList<>();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @NonNull
     @Column(length = 20, nullable = false)
     private String userId;
-
     @NonNull
     @Column(length = 20, nullable = false)
     private String password;
-
     @NonNull
     @Column(length = 20, nullable = false)
     private String name;
-
     @Column(length = 50)
     private String email;
-
-    @NonNull
-    @Column(nullable = false)
-    private LocalDateTime created_at = LocalDateTime.now();
-
-    private LocalDateTime updated_at = LocalDateTime.now();
 
     protected User() {
     }
@@ -49,6 +51,10 @@ public class User {
         this.password = password;
         this.name = name;
         this.email = email;
+    }
+
+    public static GuestUser getGuestUser() {
+        return GUEST_USER;
     }
 
     public void update(User loginUser, User target) {
@@ -133,16 +139,20 @@ public class User {
         return created_at;
     }
 
-    public void setCreated_at(@NonNull LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
-
     public LocalDateTime getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public List<DeleteHistory> getDeleteHistories() {
+        return deleteHistories;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     @Override

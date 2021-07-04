@@ -5,12 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.DeleteHistory;
-import qna.repository.DeleteHistoryRepository;
-
-import java.time.LocalDateTime;
+import qna.domain.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static qna.domain.ContentType.*;
+import static qna.domain.ContentType.QUESTION;
 
 @DataJpaTest
 class DeleteHistoryRepositoryTest {
@@ -22,7 +20,8 @@ class DeleteHistoryRepositoryTest {
     @Test
     void save() {
         // given
-        DeleteHistory deleteHistory = new DeleteHistory(QUESTION, 1L, 2L, LocalDateTime.now());
+        User deletedUser = new User("dani", "dani", "dani", "dani@gmail.com");
+        DeleteHistory deleteHistory = new DeleteHistory(QUESTION, 1L, deletedUser);
 
         // when
         DeleteHistory savedDeleteHistory = deleteHistories.save(deleteHistory);

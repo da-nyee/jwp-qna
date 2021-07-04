@@ -4,9 +4,12 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,8 +21,6 @@ public class Question {
     @Lob
     private String contents;
 
-    private Long writerId;
-
     @NonNull
     @Column(nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();
@@ -29,6 +30,13 @@ public class Question {
     @NonNull
     @Column(nullable = false)
     private boolean deleted = false;
+
+    @OneToMany(mappedBy = "question", orphanRemoval = true)
+    private List<Answer> answers = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    private User writer;
 
     protected Question() {
     }
@@ -44,12 +52,12 @@ public class Question {
     }
 
     public Question writeBy(User writer) {
-        this.writerId = writer.getId();
+        this.writer = writer;
         return this;
     }
 
     public boolean isOwner(User writer) {
-        return this.writerId.equals(writer.getId());
+        return this.writer.equals(writer);
     }
 
     public void addAnswer(Answer answer) {
@@ -81,14 +89,6 @@ public class Question {
         this.contents = contents;
     }
 
-    public Long getWriterId() {
-        return writerId;
-    }
-
-    public void setWriterId(Long writerId) {
-        this.writerId = writerId;
-    }
-
     @NonNull
     public LocalDateTime getCreated_at() {
         return created_at;
@@ -114,16 +114,33 @@ public class Question {
         this.deleted = deleted;
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
     @Override
     public String toString() {
         return "Question{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
-                ", writerId=" + writerId +
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
                 ", deleted=" + deleted +
+                ", answers=" + answers +
+                ", writer=" + writer +
                 '}';
     }
 }
