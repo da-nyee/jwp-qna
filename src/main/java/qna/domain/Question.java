@@ -18,30 +18,23 @@ import org.springframework.lang.NonNull;
 @Entity
 public class Question {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NonNull
-    @Column(length = 100, nullable = false)
-    private String title;
-
-    @Lob
-    private String contents;
-
     @NonNull
     @Column(nullable = false)
     private final LocalDateTime created_at = LocalDateTime.now();
-
     private final LocalDateTime updated_at = LocalDateTime.now();
-
+    @OneToMany(mappedBy = "question", orphanRemoval = true)
+    private final List<Answer> answers = new ArrayList<>();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NonNull
+    @Column(length = 100, nullable = false)
+    private String title;
+    @Lob
+    private String contents;
     @NonNull
     @Column(nullable = false)
     private boolean deleted = false;
-
-    @OneToMany(mappedBy = "question", orphanRemoval = true)
-    private final List<Answer> answers = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
     private User writer;

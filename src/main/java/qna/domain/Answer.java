@@ -18,19 +18,15 @@ import qna.exception.UnAuthorizedException;
 @Entity
 public class Answer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Lob
-    private String contents;
-
     @NonNull
     @Column(nullable = false)
     private final LocalDateTime created_at = LocalDateTime.now();
-
     private final LocalDateTime updated_at = LocalDateTime.now();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Lob
+    private String contents;
     @NonNull
     @Column(nullable = false)
     private boolean deleted = false;

@@ -1,5 +1,7 @@
 package qna.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.domain.Answer;
 import qna.domain.Question;
 import qna.domain.User;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 class AnswerRepositoryTest {

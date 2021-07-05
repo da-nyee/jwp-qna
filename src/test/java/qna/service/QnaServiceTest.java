@@ -1,27 +1,29 @@
 package qna.service;
 
-import java.util.Collections;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import qna.exception.CannotDeleteException;
-import qna.domain.*;
-import qna.repository.AnswerRepository;
-import qna.repository.QuestionRepository;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static qna.domain.ContentType.ANSWER;
 import static qna.domain.ContentType.QUESTION;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import qna.domain.Answer;
+import qna.domain.DeleteHistory;
+import qna.domain.Question;
+import qna.domain.User;
+import qna.exception.CannotDeleteException;
+import qna.repository.AnswerRepository;
+import qna.repository.QuestionRepository;
 
 @ExtendWith(MockitoExtension.class)
 class QnaServiceTest {
@@ -79,7 +81,7 @@ class QnaServiceTest {
             .thenReturn(Optional.of(question));
 
         assertThatThrownBy(() -> qnaService.deleteQuestion(user2, question.getId()))
-                .isInstanceOf(CannotDeleteException.class);
+            .isInstanceOf(CannotDeleteException.class);
     }
 
     @Test
@@ -106,13 +108,13 @@ class QnaServiceTest {
             .thenReturn(Arrays.asList(answer1, answer2));
 
         assertThatThrownBy(() -> qnaService.deleteQuestion(user1, this.question.getId()))
-                .isInstanceOf(CannotDeleteException.class);
+            .isInstanceOf(CannotDeleteException.class);
     }
 
     private void verifyDeleteHistories() {
         List<DeleteHistory> deleteHistories = Arrays.asList(
-                new DeleteHistory(QUESTION, question.getId(), question.getWriter()),
-                new DeleteHistory(ANSWER, answer1.getId(), answer1.getWriter())
+            new DeleteHistory(QUESTION, question.getId(), question.getWriter()),
+            new DeleteHistory(ANSWER, answer1.getId(), answer1.getWriter())
         );
 
         verify(deleteHistoryService).saveAll(deleteHistories);
