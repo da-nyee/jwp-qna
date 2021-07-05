@@ -1,11 +1,19 @@
 package qna.domain;
 
-import org.springframework.lang.NonNull;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import org.springframework.lang.NonNull;
 
 @Entity
 public class Question {
@@ -23,16 +31,16 @@ public class Question {
 
     @NonNull
     @Column(nullable = false)
-    private LocalDateTime created_at = LocalDateTime.now();
+    private final LocalDateTime created_at = LocalDateTime.now();
 
-    private LocalDateTime updated_at = LocalDateTime.now();
+    private final LocalDateTime updated_at = LocalDateTime.now();
 
     @NonNull
     @Column(nullable = false)
     private boolean deleted = false;
 
     @OneToMany(mappedBy = "question", orphanRemoval = true)
-    private List<Answer> answers = new ArrayList<>();
+    private final List<Answer> answers = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "writer_id")
@@ -64,12 +72,16 @@ public class Question {
         answer.toQuestion(this);
     }
 
-    public Long getId() {
-        return id;
+    public void delete() {
+        this.deleted = true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @NonNull
@@ -77,16 +89,8 @@ public class Question {
         return title;
     }
 
-    public void setTitle(@NonNull String title) {
-        this.title = title;
-    }
-
     public String getContents() {
         return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 
     @NonNull
@@ -94,53 +98,29 @@ public class Question {
         return created_at;
     }
 
-    public void setCreated_at(@NonNull LocalDateTime created_at) {
-        this.created_at = created_at;
-    }
-
     public LocalDateTime getUpdated_at() {
         return updated_at;
-    }
-
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 
     public List<Answer> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
     public User getWriter() {
         return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
     }
 
     @Override
     public String toString() {
         return "Question{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", contents='" + contents + '\'' +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
-                ", deleted=" + deleted +
-                ", answers=" + answers +
-                ", writer=" + writer +
-                '}';
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", contents='" + contents + '\'' +
+            ", created_at=" + created_at +
+            ", updated_at=" + updated_at +
+            ", deleted=" + deleted +
+            ", answers=" + answers +
+            ", writer=" + writer +
+            '}';
     }
 }

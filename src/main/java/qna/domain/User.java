@@ -1,18 +1,20 @@
 package qna.domain;
 
-import org.springframework.lang.NonNull;
-import qna.exception.UnAuthorizedException;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import org.springframework.lang.NonNull;
+import qna.exception.UnAuthorizedException;
 
 @Entity
 public class User {
-
-    public static final GuestUser GUEST_USER = new GuestUser();
 
     @NonNull
     @Column(nullable = false)
@@ -63,12 +65,8 @@ public class User {
         this.email = email;
     }
 
-    public static GuestUser getGuestUser() {
-        return GUEST_USER;
-    }
-
-    public void update(User loginUser, User target) {
-        if (!matchUserId(loginUser.userId)) {
+    public void update(User target) {
+        if (!matchUserId(this.userId)) {
             throw new UnAuthorizedException();
         }
 
@@ -80,7 +78,7 @@ public class User {
         this.email = target.email;
     }
 
-    private boolean matchUserId(String userId) {
+    public boolean matchUserId(String userId) {
         return this.userId.equals(userId);
     }
 
@@ -88,100 +86,37 @@ public class User {
         return this.password.equals(targetPassword);
     }
 
-    public boolean equalsNameAndEmail(User target) {
-        if (Objects.isNull(target)) {
-            return false;
-        }
-
-        return name.equals(target.name) &&
-                email.equals(target.email);
-    }
-
-    public boolean isGuestUser() {
-        return false;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return name.equals(user.name) && Objects.equals(email, user.email);
     }
 
-    @NonNull
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(@NonNull String userId) {
-        this.userId = userId;
-    }
-
-    @NonNull
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@NonNull String password) {
-        this.password = password;
-    }
-
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    public void setName(@NonNull String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @NonNull
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public List<DeleteHistory> getDeleteHistories() {
-        return deleteHistories;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
-                '}';
-    }
-
-    private static class GuestUser extends User {
-        @Override
-        public boolean isGuestUser() {
-            return true;
-        }
+            "id=" + id +
+            ", userId='" + userId + '\'' +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", created_at=" + created_at +
+            ", updated_at=" + updated_at +
+            '}';
     }
 }
