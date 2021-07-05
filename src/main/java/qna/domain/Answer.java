@@ -21,12 +21,16 @@ public class Answer {
     @NonNull
     @Column(nullable = false)
     private final LocalDateTime created_at = LocalDateTime.now();
+
     private final LocalDateTime updated_at = LocalDateTime.now();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Lob
     private String contents;
+
     @NonNull
     @Column(nullable = false)
     private boolean deleted = false;
@@ -80,19 +84,6 @@ public class Answer {
 
     public Long getId() {
         return id;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    @NonNull
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
     }
 
     public Question getQuestion() {
