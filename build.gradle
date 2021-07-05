@@ -19,8 +19,6 @@ dependencies {
 	// DB
 	runtimeOnly 'com.h2database:h2'
 
-	compileOnly 'org.projectlombok:lombok'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.assertj:assertj-core:3.19.0'
 }

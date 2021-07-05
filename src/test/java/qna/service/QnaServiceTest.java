@@ -1,5 +1,6 @@
 package qna.service;
 
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +25,7 @@ import static qna.domain.ContentType.QUESTION;
 
 @ExtendWith(MockitoExtension.class)
 class QnaServiceTest {
+
     @Mock
     private QuestionRepository questionRepository;
 
@@ -48,8 +50,10 @@ class QnaServiceTest {
 
     @Test
     public void delete_성공() throws Exception {
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
-        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId())).thenReturn(Arrays.asList(answer));
+        when(questionRepository.findByIdAndDeletedFalse(question.getId()))
+            .thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId()))
+            .thenReturn(Collections.singletonList(answer));
 
         assertThat(question.isDeleted()).isFalse();
         qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
@@ -60,7 +64,8 @@ class QnaServiceTest {
 
     @Test
     public void delete_다른_사람이_쓴_글() throws Exception {
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
+        when(questionRepository.findByIdAndDeletedFalse(question.getId()))
+            .thenReturn(Optional.of(question));
 
         assertThatThrownBy(() -> qnaService.deleteQuestion(UserTest.SANJIGI, question.getId()))
                 .isInstanceOf(CannotDeleteException.class);
@@ -68,8 +73,10 @@ class QnaServiceTest {
 
     @Test
     public void delete_성공_질문자_답변자_같음() throws Exception {
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
-        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId())).thenReturn(Arrays.asList(answer));
+        when(questionRepository.findByIdAndDeletedFalse(question.getId()))
+            .thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId()))
+            .thenReturn(Collections.singletonList(answer));
 
         qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId());
 
@@ -83,8 +90,10 @@ class QnaServiceTest {
         Answer answer2 = new Answer(2L, UserTest.SANJIGI, QuestionTest.Q1, "Answers Contents1");
         question.addAnswer(answer2);
 
-        when(questionRepository.findByIdAndDeletedFalse(question.getId())).thenReturn(Optional.of(question));
-        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId())).thenReturn(Arrays.asList(answer, answer2));
+        when(questionRepository.findByIdAndDeletedFalse(question.getId()))
+            .thenReturn(Optional.of(question));
+        when(answerRepository.findByQuestionIdAndDeletedFalse(question.getId()))
+            .thenReturn(Arrays.asList(answer, answer2));
 
         assertThatThrownBy(() -> qnaService.deleteQuestion(UserTest.JAVAJIGI, question.getId()))
                 .isInstanceOf(CannotDeleteException.class);
@@ -95,6 +104,7 @@ class QnaServiceTest {
                 new DeleteHistory(QUESTION, question.getId(), question.getWriter()),
                 new DeleteHistory(ANSWER, answer.getId(), answer.getWriter())
         );
+
         verify(deleteHistoryService).saveAll(deleteHistories);
     }
 }

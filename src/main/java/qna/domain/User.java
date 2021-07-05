@@ -13,28 +13,38 @@ import java.util.Objects;
 public class User {
 
     public static final GuestUser GUEST_USER = new GuestUser();
+
     @NonNull
     @Column(nullable = false)
     private final LocalDateTime created_at = LocalDateTime.now();
+
     private final LocalDateTime updated_at = LocalDateTime.now();
+
     @OneToMany(mappedBy = "writer", orphanRemoval = true)
     private final List<Answer> answers = new ArrayList<>();
+
     @OneToMany(mappedBy = "deletedUser", orphanRemoval = true)
     private final List<DeleteHistory> deleteHistories = new ArrayList<>();
+
     @OneToMany(mappedBy = "writer", orphanRemoval = true)
     private final List<Question> questions = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NonNull
     @Column(length = 20, nullable = false)
     private String userId;
+
     @NonNull
     @Column(length = 20, nullable = false)
     private String password;
+
     @NonNull
     @Column(length = 20, nullable = false)
     private String name;
+
     @Column(length = 50)
     private String email;
 
