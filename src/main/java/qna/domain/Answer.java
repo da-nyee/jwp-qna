@@ -1,8 +1,8 @@
 package qna.domain;
 
 import org.springframework.lang.NonNull;
-import qna.NotFoundException;
-import qna.UnAuthorizedException;
+import qna.exception.NotFoundException;
+import qna.exception.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

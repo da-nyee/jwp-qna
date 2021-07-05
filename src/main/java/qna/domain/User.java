@@ -1,7 +1,7 @@
 package qna.domain;
 
 import org.springframework.lang.NonNull;
-import qna.UnAuthorizedException;
+import qna.exception.UnAuthorizedException;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
